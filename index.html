@@ -185,18 +185,41 @@
         // --- ЛОББИ ---
         let lobbyInterval;
         function createLobby() {
-            switchTab('screen-lobby', document.querySelectorAll('.nav-item')[0]);
-            document.getElementById('lobby-link').innerText = `https://t.me/courtrus_bot?start=join_${Math.floor(Math.random()*10000)}`;
-            
-            let lobbyTime = 180;
+    switchTab('screen-lobby', document.querySelectorAll('.nav-item')[0]);
+    
+    // Генерируем фейковую ссылку
+    document.getElementById('lobby-link').innerText = `https://t.me/courtrus_bot?start=join_${Math.floor(Math.random()*10000)}`;
+    
+    // ВЫЧИСЛЯЕМ РОЛЬ
+    let myId = tg.initDataUnsafe?.user?.id; // Получаем реальный ID пользователя
+    let isJudge = (myId == 7414218922); // ПРОВЕРКА НА СУДЬЮ
+
+    let card = document.querySelector('.player-card');
+    if (isJudge) {
+        // Если это ты (судья)
+        card.querySelector('.avatar').innerText = "👑";
+        card.querySelector('.role').innerText = "Судья";
+        document.querySelector('.lobby-title').innerText = "Вы — Судья 👑";
+    } else {
+        // Если это обычный игрок
+        card.querySelector('.avatar').innerText = "🙋‍♂️";
+        card.querySelector('.role').innerText = "Истец";
+        document.querySelector('.lobby-title').innerText = "Лобби создано";
+    }
+    
+    // Запускаем таймер
+    let lobbyTime = 180;
+    clearInterval(lobbyInterval);
+    lobbyInterval = setInterval(() => {
+        lobbyTime--;
+        let min = Math.floor(lobbyTime / 60);
+        let sec = lobbyTime % 60;
+        document.getElementById('lobby-timer').innerText = `0${min}:${sec < 10 ? '0'+sec : sec}`;
+        if (lobbyTime <= 0) {
             clearInterval(lobbyInterval);
-            lobbyInterval = setInterval(() => {
-                lobbyTime--;
-                let min = Math.floor(lobbyTime / 60);
-                let sec = lobbyTime % 60;
-                document.getElementById('lobby-timer').innerText = `0${min}:${sec < 10 ? '0'+sec : sec}`;
-                if (lobbyTime <= 0) { clearInterval(lobbyInterval); }
-            }, 1000);
+            document.getElementById('error-overlay').classList.add('active');
+        }
+    }, 1000);
         }
 
       // --- НОВАЯ УДОБНАЯ ЗМЕЙКА ---
