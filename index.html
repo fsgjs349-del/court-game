@@ -287,3 +287,12 @@
     </script>
 </body>
 </html>
+// --- ТЕСТОВЫЙ ЗАПУСК ИГРЫ ---
+// Через 5 секунд после загрузки автоматически перекидывает в чат и разрешает писать
+setTimeout(() => {
+    switchTab('screen-chat', document.querySelectorAll('.nav-item')[1]);
+    document.getElementById('chat-header').innerText = "Ход: Прокурор";
+    document.getElementById('chat-input').disabled = false; // Разблокируем поле
+    document.getElementById('chat-input').placeholder = "Напиши аргумент...";
+    addMessage("⚖️ Суд начался. Слово предоставляется Прокурору.", "system");
+}, 5000);
