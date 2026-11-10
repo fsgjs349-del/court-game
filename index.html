@@ -12,26 +12,21 @@
             background: #050505; color: #fff; font-family: 'Unbounded', sans-serif; margin: 0; padding: 0; height: 100vh;
             display: flex; flex-direction: column; overflow: hidden;
         }
-        
         .content { flex: 1; display: flex; flex-direction: column; padding: 15px; padding-bottom: 90px; overflow-y: auto; }
         .screen { display: none; flex-direction: column; height: 100%; }
         .screen.active { display: flex; }
 
-        /* --- ГЛАВНОЕ МЕНЮ --- */
         .main-menu { align-items: center; justify-content: center; text-align: center; height: 100%; display: flex; flex-direction: column; }
-        .main-title { font-size: 28px; font-weight: 900; color: #ffd700; text-shadow: 0 0 30px rgba(255,215,0,0.6); margin-bottom: 10px; text-transform: uppercase; }
+        .main-title { font-size: 28px; font-weight: 900; color: #ffd700; text-transform: uppercase; margin-bottom: 10px; }
         .main-subtitle { font-size: 12px; color: #888; margin-bottom: 20px; }
         
-        /* Змейка */
         .snake-container { background: rgba(0,0,0,0.5); border-radius: 20px; padding: 10px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; }
         canvas#snake-game { background: #0d0d12; border-radius: 10px; width: 250px; height: 250px; touch-action: none; }
         .snake-score { font-size: 14px; font-weight: bold; color: #00ffcc; margin-bottom: 10px; }
 
-        /* Кнопка Музыки */
         .music-btn-small { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); border: 1px solid #444; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; color: white; }
         .music-btn-small.active { background: #ffd700; color: #000; border-color: #ffd700; }
 
-        /* --- ЛОББИ --- */
         .lobby-box { text-align: center; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: center; }
         .lobby-title { color: #fff; font-size: 20px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; }
         .lobby-timer { font-size: 40px; font-weight: 900; color: #00ffcc; margin: 10px 0; }
@@ -45,7 +40,6 @@
         .copy-btn { background: #ffd700; color: #000; border: none; border-radius: 12px; padding: 0 15px; font-weight: bold; cursor: pointer; }
         .wait-text { margin-top: 15px; color: #888; font-size: 12px; }
 
-        /* --- ЧАТ, ИНФО, ТОП --- */
         .chat-screen { display: none; flex-direction: column; height: 100%; }
         .chat-screen.active { display: flex; }
         .chat-header { text-align: center; font-size: 14px; color: #ffd700; margin-bottom: 10px; font-weight: bold; }
@@ -59,7 +53,6 @@
         .chat-input-area button { width: 50px; border-radius: 12px; background: #ffd700; color: #000; font-size: 18px; border: none; cursor: pointer; }
 
         .info-box { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); line-height: 1.6; font-size: 12px; color: #bbb; margin-top: 20px; }
-        .info-box h3 { color: #fff; margin-top: 0; }
         .creator-btn { display: inline-block; margin-top: 15px; padding: 12px 20px; background: #1a1a24; border-radius: 12px; color: #ffd700; text-decoration: none; font-weight: 600; border: 1px solid #ffd700; }
 
         .top-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
@@ -70,7 +63,6 @@
         .top-name { font-size: 14px; font-weight: bold; color: #fff; }
         .top-money { font-size: 11px; color: #00ffcc; }
 
-        /* --- МЕНЮ --- */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 80px; background: rgba(5, 5, 5, 0.95); border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 10; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; font-size: 9px; cursor: pointer; width: 20%; text-transform: uppercase; }
         .nav-icon-wrap { width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; margin-bottom: 4px; border: 1px solid transparent; }
@@ -78,6 +70,20 @@
         .nav-item.active { color: #ffd700; }
         .nav-item.active .nav-icon-wrap { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; }
         .center-play-btn { width: 65px; height: 65px; background: #ffd700; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #000; transform: translateY(-20px); border: 5px solid #050505; cursor: pointer; }
+
+        .verdict-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: flex-end; z-index: 100; transform: translateY(100%); transition: transform 0.4s; }
+        .verdict-overlay.active { transform: translateY(0); }
+        .verdict-panel { background: #121218; width: 100%; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; }
+        .verdict-panel h3 { margin: 0 0 15px 0; color: #ffd700; font-size: 16px; text-align: center; }
+        .verdict-panel textarea { width: 100%; height: 100px; padding: 15px; border-radius: 16px; border: 1px solid #333; background: #1a1a24; color: #fff; font-family: 'Unbounded', sans-serif; font-size: 12px; resize: none; outline: none; margin-bottom: 15px; }
+        .verdict-btns { display: flex; gap: 10px; }
+        .verdict-btns button { flex: 1; padding: 16px; border-radius: 16px; border: none; font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 12px; color: #fff; cursor: pointer; }
+        .btn-guilty { background: linear-gradient(135deg, #ff0f7b, #f89b29); }
+        .btn-not { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+
+        .error-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 200; display: none; align-items: center; justify-content: center; flex-direction: column; padding: 20px; text-align: center; }
+        .error-overlay.active { display: flex; }
+        .error-text { color: #ff4b2b; font-size: 16px; font-weight: bold; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -88,7 +94,6 @@
                 <button class="music-btn-small" id="music-btn" onclick="toggleMusic()">🎵</button>
                 <div class="main-title">Зал Суда</div>
                 <div class="main-subtitle">Создатель: @gupuyi</div>
-
                 <div class="snake-container">
                     <div class="snake-score">Счет: <span id="score">0</span></div>
                     <canvas id="snake-game" width="250" height="250"></canvas>
@@ -102,15 +107,15 @@
                 <div class="lobby-title">Лобби создано</div>
                 <div class="lobby-timer" id="lobby-timer">03:00</div>
                 <div class="player-card">
-                    <div class="avatar">🙋‍♂️</div>
-                    <div class="role">Истец</div>
-                    <div class="name">Ты</div>
+                    <div class="avatar" id="my-avatar">🙋‍♂️</div>
+                    <div class="role" id="my-role">Ожидание</div>
+                    <div class="name" id="my-name">Ты</div>
                 </div>
                 <div class="invite-box">
-                    <div class="invite-link" id="lobby-link">https://t.me/courtrus_bot?start=join_12345</div>
+                    <div class="invite-link" id="lobby-link">Генерация...</div>
                     <button class="copy-btn" onclick="copyLink()">📋</button>
                 </div>
-                <div class="wait-text">Ожидание игроков...</div>
+                <div class="wait-text">Ожидание игроков (минимум 3)...</div>
             </div>
         </div>
 
@@ -129,9 +134,7 @@
             <div class="main-title" style="text-align:center; margin-top:20px; font-size: 20px;">О Игре</div>
             <div class="info-box">
                 <h3>Добро пожаловать в Суд!</h3>
-                <p>Это ролевая игра. Разделитесь на роли: Прокурор, Истец, Ответчик, Адвокат и Судья.</p>
-                <p>Создатель игры:</p>
-                <a href="https://t.me/gupuyi" class="creator-btn">✈️ @gupuyi</a>
+                <p>Создатель игры: <a href="https://t.me/gupuyi" class="creator-btn">✈️ @gupuyi</a></p>
             </div>
         </div>
 
@@ -139,6 +142,18 @@
         <div class="screen" id="screen-top">
             <div class="main-title" style="text-align:center; margin-top:20px; font-size: 20px;">Топ-50</div>
             <div class="top-list" id="top-list"></div>
+        </div>
+    </div>
+
+    <!-- ВЕРДИКТ -->
+    <div class="verdict-overlay" id="verdict-overlay">
+        <div class="verdict-panel">
+            <h3>Вынесение вердикта</h3>
+            <textarea id="verdict-text" placeholder="Напиши текст решения суда..."></textarea>
+            <div class="verdict-btns">
+                <button class="btn-guilty" onclick="sendVerdict('guilty')">✅ Виновен</button>
+                <button class="btn-not" onclick="sendVerdict('not_guilty')">❌ Не виновен</button>
+            </div>
         </div>
     </div>
 
@@ -156,9 +171,8 @@
     </audio>
 
     <script>
-        // --- ИНИЦИАЛИЗАЦИЯ ---
         let tg = window.Telegram.WebApp;
-        if (tg) { tg.expand(); }
+        tg.expand();
 
         // --- МУЗЫКА ---
         let isMusicPlaying = false;
@@ -185,234 +199,37 @@
         // --- ЛОББИ ---
         let lobbyInterval;
         function createLobby() {
-    switchTab('screen-lobby', document.querySelectorAll('.nav-item')[0]);
-    
-    // Генерируем фейковую ссылку
-    document.getElementById('lobby-link').innerText = `https://t.me/courtrus_bot?start=join_${Math.floor(Math.random()*10000)}`;
-    
-    // ВЫЧИСЛЯЕМ РОЛЬ
-    let myId = tg.initDataUnsafe?.user?.id; // Получаем реальный ID пользователя
-    let isJudge = (myId == 7414218922); // ПРОВЕРКА НА СУДЬЮ
-
-    let card = document.querySelector('.player-card');
-    if (isJudge) {
-        // Если это ты (судья)
-        card.querySelector('.avatar').innerText = "👑";
-        card.querySelector('.role').innerText = "Судья";
-        document.querySelector('.lobby-title').innerText = "Вы — Судья 👑";
-    } else {
-        // Если это обычный игрок
-        card.querySelector('.avatar').innerText = "🙋‍♂️";
-        card.querySelector('.role').innerText = "Истец";
-        document.querySelector('.lobby-title').innerText = "Лобби создано";
-    }
-    
-    // Запускаем таймер
-    let lobbyTime = 180;
-    clearInterval(lobbyInterval);
-    lobbyInterval = setInterval(() => {
-        lobbyTime--;
-        let min = Math.floor(lobbyTime / 60);
-        let sec = lobbyTime % 60;
-        document.getElementById('lobby-timer').innerText = `0${min}:${sec < 10 ? '0'+sec : sec}`;
-        if (lobbyTime <= 0) {
+            switchTab('screen-lobby', document.querySelectorAll('.nav-item')[0]);
+            document.getElementById('lobby-link').innerText = `https://t.me/courtrus_bot?start=join_${Math.floor(Math.random()*10000)}`;
+            
+            // Получаем ID и роль от бота
+            let myId = tg.initDataUnsafe?.user?.id;
+            let isJudge = (myId == 7414218922);
+            let card = document.querySelector('.player-card');
+            
+            if (isJudge) {
+                document.getElementById('my-avatar').innerText = "👑";
+                document.getElementById('my-role').innerText = "Судья";
+                document.querySelector('.lobby-title').innerText = "Вы — Судья 👑";
+            } else {
+                document.getElementById('my-avatar').innerText = "🙋‍♂️";
+                document.getElementById('my-role').innerText = "Истец";
+                document.querySelector('.lobby-title').innerText = "Лобби создано";
+            }
+            
+            let lobbyTime = 180;
             clearInterval(lobbyInterval);
-            document.getElementById('error-overlay').classList.add('active');
+            lobbyInterval = setInterval(() => {
+                lobbyTime--;
+                let min = Math.floor(lobbyTime / 60);
+                let sec = lobbyTime % 60;
+                document.getElementById('lobby-timer').innerText = `0${min}:${sec < 10 ? '0'+sec : sec}`;
+                if (lobbyTime <= 0) { 
+                    clearInterval(lobbyInterval); 
+                    if (!tg.initDataUnsafe?.user) document.getElementById('error-overlay').classList.add('active');
+                }
+            }, 1000);
         }
-    }, 1000);
-        }
-
-      // --- НОВАЯ УДОБНАЯ ЗМЕЙКА ---
-const snakeCanvas = document.getElementById('snake-game');
-const snakeCtx = snakeCanvas.getContext('2d');
-const gridSize = 10; // Размер одной клетки (всего 25x25 клеток)
-
-let snake = [{x: 12, y: 12}, {x: 12, y: 13}, {x: 12, y: 14}]; // Начальная змейка из 3 частей
-let food = {x: 15, y: 15};
-let dx = 0, dy = -1; // Начинаем движение вверх
-let score = 0;
-let gameSpeed = 150; // Скорость в миллисекундах
-let snakeInterval;
-let isGameOver = false;
-
-function drawSnake() {
-    // Очищаем фон
-    snakeCtx.fillStyle = '#0d0d12';
-    snakeCtx.fillRect(0, 0, 250, 250);
-
-    // Рисуем сетку (для удобства)
-    snakeCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
-    snakeCtx.lineWidth = 1;
-    for(let i = 0; i <= 250; i += gridSize) {
-        snakeCtx.beginPath(); snakeCtx.moveTo(i, 0); snakeCtx.lineTo(i, 250); snakeCtx.stroke();
-        snakeCtx.beginPath(); snakeCtx.moveTo(0, i); snakeCtx.lineTo(250, i); snakeCtx.stroke();
-    }
-    
-    // Рисуем еду (красное яблоко)
-    snakeCtx.fillStyle = '#ff4b2b';
-    snakeCtx.shadowBlur = 10;
-    snakeCtx.shadowColor = '#ff4b2b';
-    snakeCtx.beginPath();
-    snakeCtx.arc(food.x * gridSize + gridSize/2, food.y * gridSize + gridSize/2, gridSize/2 - 1, 0, Math.PI * 2);
-    snakeCtx.fill();
-    snakeCtx.shadowBlur = 0; // Сбрасываем тень
-
-    // Рисуем змейку
-    snake.forEach((part, index) => {
-        // Голова золотая, тело бирюзовое, к концу хвоста темнеет
-        if (index === 0) {
-            snakeCtx.fillStyle = '#ffd700';
-            snakeCtx.shadowBlur = 15;
-            snakeCtx.shadowColor = '#ffd700';
-        } else {
-            let opacity = 1 - (index / snake.length) * 0.6; // Затухание к хвосту
-            snakeCtx.fillStyle = `rgba(0, 255, 204, ${opacity})`;
-            snakeCtx.shadowBlur = 5;
-            snakeCtx.shadowColor = '#00ffcc';
-        }
-        
-        snakeCtx.beginPath();
-        // Скругляем углы
-        snakeCtx.roundRect(part.x * gridSize + 1, part.y * gridSize + 1, gridSize - 2, gridSize - 2, 4);
-        snakeCtx.fill();
-    });
-    snakeCtx.shadowBlur = 0;
-
-    // Если игра окончена, выводим текст
-    if (isGameOver) {
-        snakeCtx.fillStyle = 'rgba(0,0,0,0.7)';
-        snakeCtx.fillRect(0, 0, 250, 250);
-        snakeCtx.fillStyle = '#ff4b2b';
-        snakeCtx.font = 'bold 20px Unbounded';
-        snakeCtx.textAlign = 'center';
-        snakeCtx.fillText('GAME OVER', 125, 120);
-        snakeCtx.fillStyle = '#fff';
-        snakeCtx.font = '12px Unbounded';
-        snakeCtx.fillText('Свайпни для рестарта', 125, 150);
-    }
-}
-
-function moveSnake() {
-    if (isGameOver) return;
-    if (dx === 0 && dy === 0) return; // Стоим на месте до первого свайпа
-
-    const head = {x: snake[0].x + dx, y: snake[0].y + dy};
-    
-    // Проверка на выход за границы
-    if (head.x < 0 || head.x >= 25 || head.y < 0 || head.y >= 25) {
-        isGameOver = true;
-        drawSnake();
-        return;
-    }
-    
-    // Проверка на столкновение с собой
-    for (let i = 0; i < snake.length; i++) {
-        if (snake[i].x === head.x && snake[i].y === head.y) {
-            isGameOver = true;
-            drawSnake();
-            return;
-        }
-    }
-    
-    snake.unshift(head);
-    
-    // Если съели еду
-    if (head.x === food.x && head.y === food.y) {
-        score += 10;
-        document.getElementById('score').innerText = score;
-        generateFood();
-        // Ускоряем игру (но не слишком сильно)
-        if (gameSpeed > 70) {
-            clearInterval(snakeInterval);
-            gameSpeed -= 5;
-            snakeInterval = setInterval(moveSnake, gameSpeed);
-        }
-    } else {
-        snake.pop(); // Удаляем хвост, если не съели
-    }
-    
-    drawSnake();
-}
-
-function generateFood() {
-    let newFood;
-    while (true) {
-        newFood = { x: Math.floor(Math.random() * 24), y: Math.floor(Math.random() * 24) };
-        // Проверяем, чтобы еда не появилась внутри змейки
-        let isInsideSnake = snake.some(part => part.x === newFood.x && part.y === newFood.y);
-        if (!isInsideSnake) break;
-    }
-    food = newFood;
-}
-
-function resetSnake() {
-    snake = [{x: 12, y: 12}, {x: 12, y: 13}, {x: 12, y: 14}];
-    dx = 0; dy = -1; 
-    score = 0;
-    gameSpeed = 150;
-    isGameOver = false;
-    document.getElementById('score').innerText = score;
-    generateFood();
-    
-    clearInterval(snakeInterval);
-    snakeInterval = setInterval(moveSnake, gameSpeed);
-    drawSnake();
-}
-
-// Управление свайпами
-let touchStartX = 0, touchStartY = 0;
-snakeCanvas.addEventListener('touchstart', e => {
-    touchStartX = e.touches[0].clientX; 
-    touchStartY = e.touches[0].clientY;
-}, {passive: true});
-
-snakeCanvas.addEventListener('touchend', e => {
-    if (isGameOver) {
-        resetSnake();
-        return;
-    }
-    
-    let diffX = e.changedTouches[0].clientX - touchStartX;
-    let diffY = e.changedTouches[0].clientY - touchStartY;
-    
-    // Блокируем разворот на 180 градусов
-    if (Math.abs(diffX) > Math.abs(diffY)) {
-        if (diffX > 0 && dx === 0) { dx = 1; dy = 0; } // Вправо
-        else if (diffX < 0 && dx === 0) { dx = -1; dy = 0; } // Влево
-    } else {
-        if (diffY > 0 && dy === 0) { dx = 0; dy = 1; } // Вниз
-        else if (diffY < 0 && dy === 0) { dx = 0; dy = -1; } // Вверх
-    }
-}, {passive: true});
-
-// Запуск
-resetSnake();  
-        
-        // --- МЕНЮ ---
-        function switchTab(screenId, element) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if(element) element.classList.add('active');
-        }
-
-        // --- ТОП-50 ---
-        const billionaires = [
-            { name: "Илон Маск", money: "$250 млрд", icon: "🚀" }, { name: "Джефф Безос", money: "$180 млрд", icon: "📦" },
-            { name: "Бернар Арно", money: "$170 млрд", icon: "👜" }, { name: "Марк Цукерберг", money: "$150 млрд", icon: "👤" },
-            { name: "Билл Гейтс", money: "$130 млрд", icon: "💻" }, { name: "Ларри Эллисон", money: "$120 млрд", icon: "☁️" },
-            { name: "Уоррен Баффет", money: "$110 млрд", icon: "📈" }, { name: "Ларри Пейдж", money: "$105 млрд", icon: "🔍" },
-            { name: "Сергей Брин", money: "$100 млрд", icon: "🌐" }, { name: "Стив Балмер", money: "$95 млрд", icon: "🪟" }
-        ];
-        function renderTop() {
-            let list = document.getElementById('top-list'); list.innerHTML = '';
-            billionaires.forEach((b, i) => {
-                let div = document.createElement('div'); div.className = 'top-item';
-                div.innerHTML = `<div class="top-rank">${i+1}</div><div class="top-avatar">${b.icon}</div><div class="top-info"><div class="top-name">${b.name}</div><div class="top-money">${b.money}</div></div>`;
-                list.appendChild(div);
-            });
-        }
-        renderTop();
 
         // --- ЧАТ ---
         function addMessage(text, type) {
@@ -422,15 +239,76 @@ resetSnake();
             else { div.className = `message-bubble ${type === 'my' ? 'right' : 'left'}`; div.appendChild(document.createTextNode(text)); }
             box.appendChild(div); box.scrollTop = box.scrollHeight;
         }
+        
         function sendMessage() {
             let input = document.getElementById('chat-input');
             let text = input.value.trim();
             if (text === '') return;
             let words = text.split(/\s+/).filter(word => word.length > 0);
             if (words.length < 5) { addMessage(`⚠️ Ошибка: минимум 5 слов!`, "system"); return; }
-            addMessage(text, 'my'); input.value = '';
+            
+            addMessage(text, 'my'); 
+            input.value = '';
+            
+            // Отправляем боту
+            tg.sendData(JSON.stringify({ action: 'chat_message', text: text }));
         }
-    </script>
-</body>
-</html>
 
+        // --- ВЕРДИКТ ---
+        function showVerdictPanel() { document.getElementById('verdict-overlay').classList.add('active'); }
+        function sendVerdict(type) {
+            let text = document.getElementById('verdict-text').value;
+            if (text.trim() === '') return alert('Напиши текст решения!');
+            tg.sendData(JSON.stringify({ action: 'verdict', type: type, text: text }));
+            document.getElementById('verdict-overlay').classList.remove('active');
+            addMessage(`Решение суда: ${text}`, "my");
+            addMessage(type === 'guilty' ? "✅ ВИНОВЕН" : "❌ НЕ ВИНОВЕН", "system");
+        }
+
+        // --- МЕНЮ ---
+        function switchTab(screenId, element) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if(element) element.classList.add('active');
+        }
+
+        // --- ЗМЕЙКА ---
+        const snakeCanvas = document.getElementById('snake-game');
+        const snakeCtx = snakeCanvas.getContext('2d');
+        const gridSize = 10;
+        let snake = [{x: 12, y: 12}, {x: 12, y: 13}, {x: 12, y: 14}];
+        let food = {x: 15, y: 15};
+        let dx = 0, dy = -1;
+        let score = 0;
+        let gameSpeed = 150;
+        let snakeInterval;
+        let isGameOver = false;
+
+        function drawSnake() {
+            snakeCtx.fillStyle = '#0d0d12'; snakeCtx.fillRect(0, 0, 250, 250);
+            snakeCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+            for(let i = 0; i <= 250; i += gridSize) { snakeCtx.beginPath(); snakeCtx.moveTo(i, 0); snakeCtx.lineTo(i, 250); snakeCtx.stroke(); snakeCtx.beginPath(); snakeCtx.moveTo(0, i); snakeCtx.lineTo(250, i); snakeCtx.stroke(); }
+            snakeCtx.fillStyle = '#ff4b2b'; snakeCtx.shadowBlur = 10; snakeCtx.shadowColor = '#ff4b2b';
+            snakeCtx.beginPath(); snakeCtx.arc(food.x * gridSize + 5, food.y * gridSize + 5, 4, 0, Math.PI * 2); snakeCtx.fill(); snakeCtx.shadowBlur = 0;
+            snake.forEach((part, index) => {
+                if (index === 0) { snakeCtx.fillStyle = '#ffd700'; snakeCtx.shadowBlur = 15; snakeCtx.shadowColor = '#ffd700'; } 
+                else { let opacity = 1 - (index / snake.length) * 0.6; snakeCtx.fillStyle = `rgba(0, 255, 204, ${opacity})`; snakeCtx.shadowBlur = 5; snakeCtx.shadowColor = '#00ffcc'; }
+                snakeCtx.beginPath(); snakeCtx.roundRect(part.x * gridSize + 1, part.y * gridSize + 1, 8, 8, 4); snakeCtx.fill();
+            });
+            snakeCtx.shadowBlur = 0;
+            if (isGameOver) { snakeCtx.fillStyle = 'rgba(0,0,0,0.7)'; snakeCtx.fillRect(0, 0, 250, 250); snakeCtx.fillStyle = '#ff4b2b'; snakeCtx.font = 'bold 20px Unbounded'; snakeCtx.textAlign = 'center'; snakeCtx.fillText('GAME OVER', 125, 120); snakeCtx.fillStyle = '#fff'; snakeCtx.font = '12px Unbounded'; snakeCtx.fillText('Свайпни для рестарта', 125, 150); }
+        }
+
+        function moveSnake() {
+            if (isGameOver) return;
+            const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+            if (head.x < 0 || head.x >= 25 || head.y < 0 || head.y >= 25) { isGameOver = true; drawSnake(); return; }
+            for (let i = 0; i < snake.length; i++) { if (snake[i].x === head.x && snake[i].y === head.y) { isGameOver = true; drawSnake(); return; } }
+            snake.unshift(head);
+            if (head.x === food.x && head.y === food.y) { score += 10; document.getElementById('score').innerText = score; generateFood(); if (gameSpeed > 70) { clearInterval(snakeInterval); gameSpeed -= 5; snakeInterval = setInterval(moveSnake, gameSpeed); } } 
+            else { snake.pop(); }
+            drawSnake();
+        }
+
+        function generateFood() { let newFood; while (true) { newFood = { x: Math.floor(Math.random() * 24), y: Math.floor(Math.random() * 24) }; let isInsideSnake = 
