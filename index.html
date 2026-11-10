@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Зал Суда</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e1e24, #0f0f13);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 15px;
+            text-align: center;
+        }
+        .header {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #ffd700;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+        h1 { font-size: 20px; margin: 0; color: #ffd700; }
+        .case-text { font-size: 14px; color: #ccc; margin-top: 10px; }
+        .players {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .player-card {
+            background: #2a2a35;
+            border-radius: 12px;
+            padding: 10px;
+            border: 1px solid #444;
+            transition: 0.3s;
+        }
+        .player-card.active {
+            border-color: #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            transform: scale(1.05);
+        }
+        .role { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .name { font-size: 16px; font-weight: bold; margin-top: 5px; }
+        .timer {
+            font-size: 36px;
+            font-weight: bold;
+            color: #00ffcc;
+            margin: 15px 0;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+        .actions { display: flex; flex-direction: column; gap: 10px; }
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:active { transform: scale(0.95); }
+        .btn-guilty { background: linear-gradient(90deg, #ff416c, #ff4b2b); }
+        .btn-not { background: linear-gradient(90deg, #2193b0, #6dd5ed); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚖️ ЗАЛ СУДА</h1>
+        <div class="case-text" id="case-text">Загрузка дела...</div>
+    </div>
+
+    <div class="timer" id="timer">03:00</div>
+
+    <div class="players">
+        <div class="player-card" id="card-prokuror">
+            <div class="role">Прокурор</div>
+            <div class="name" id="name-prokuror">...</div>
+        </div>
+        <div class="player-card" id="card-istets">
+            <div class="role">Истец</div>
+            <div class="name" id="name-istets">...</div>
+        </div>
+        <div class="player-card" id="card-otvetchik">
+            <div class="role">Ответчик</div>
+            <div class="name" id="name-otvetchik">...</div>
+        </div>
+        <div class="player-card" id="card-advokat">
+            <div class="role">Адвокат</div>
+            <div class="name" id="name-advokat">...</div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button class="btn-guilty" onclick="sendAction('verdict_guilty')">✅ ВИНОВЕН</button>
+        <button class="btn-not" onclick="sendAction('verdict_not_guilty')">❌ НЕ ВИНОВЕН</button>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Развернуть на весь экран
+        tg.setHeaderColor('#1e1e24');
+        tg.setBackgroundColor('#1e1e24');
+
+        // Тестовые данные для проверки дизайна
+        document.getElementById('case-text').innerText = "Обвиняется в краже печенья";
+        document.getElementById('name-prokuror').innerText = "Иван";
+        document.getElementById('name-istets').innerText = "Ты";
+        document.getElementById('name-otvetchik').innerText = "Петр";
+        document.getElementById('name-advokat').innerText = "Анна";
+        
+        // Подсвечиваем активного игрока
+        document.getElementById('card-prokuror').classList.add('active');
+
+        // Функция отправки данных боту
+        function sendAction(action) {
+            tg.sendData(JSON.stringify({ action: action }));
+            tg.close(); // Закрыть окно после нажатия
+        }
+    </script>
+</body>
+</html>
