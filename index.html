@@ -14,81 +14,139 @@
             background-image: radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.05) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(0, 255, 204, 0.05) 0%, transparent 40%);
         }
         #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-        .content { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; padding: 15px; padding-bottom: 80px; overflow-y: auto; }
+        .content { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; padding: 15px; padding-bottom: 90px; overflow-y: auto; }
         
-        /* ЭКРАН 1: ЛОББИ (Карточки) */
-        .lobby-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
-        .game-title { color: #fff; font-size: 20px; font-weight: 800; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5); text-transform: uppercase; margin-bottom: 20px; }
-        .players-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 400px; }
-        .player-card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 10px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .avatar { width: 40px; height: 40px; margin: 0 auto 5px auto; border-radius: 12px; background: #1a1a24; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .role { font-size: 9px; color: #888; text-transform: uppercase; }
-        .name { font-size: 12px; font-weight: bold; }
+        .screen { display: none; flex-direction: column; height: 100%; animation: fadeIn 0.3s ease; }
+        .screen.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ЭКРАН 2: ЧАТ */
+        /* --- ЛОББИ --- */
+        .lobby-box { text-align: center; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: center; }
+        .game-title { color: #fff; font-size: 20px; font-weight: 800; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5); text-transform: uppercase; margin-bottom: 15px; }
+        .lobby-timer { font-size: 40px; font-weight: 900; color: #00ffcc; text-shadow: 0 0 20px rgba(0,255,204,0.5); margin: 10px 0; }
+        .player-card { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; text-align: center; border: 1px solid #ffd700; width: 150px; box-shadow: 0 0 20px rgba(255,215,0,0.2); }
+        .avatar { width: 60px; height: 60px; margin: 0 auto 10px auto; border-radius: 18px; background: #1a1a24; display: flex; align-items: center; justify-content: center; font-size: 30px; }
+        .role { font-size: 10px; color: #888; text-transform: uppercase; margin-bottom: 5px; }
+        .name { font-size: 16px; font-weight: bold; color: #ffd700; }
+        .invite-link { margin-top: 20px; background: #1a1a24; padding: 12px; border-radius: 12px; border: 1px dashed #ffd700; font-size: 11px; color: #ffd700; word-break: break-all; }
+        .wait-text { margin-top: 15px; color: #888; font-size: 12px; }
+        .music-btn { margin-bottom: 15px; padding: 10px 20px; border-radius: 20px; background: rgba(255,255,255,0.1); color: #ffd700; border: 1px solid #ffd700; font-family: 'Unbounded', sans-serif; font-size: 12px; cursor: pointer; }
+
+        /* --- ЧАТ --- */
         .chat-screen { display: none; flex-direction: column; height: 100%; }
         .chat-screen.active { display: flex; }
+        .chat-header { text-align: center; font-size: 14px; color: #ffd700; margin-bottom: 10px; font-weight: bold; }
         .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-bottom: 10px; }
-        
         .message-bubble { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 12px; line-height: 1.4; animation: popIn 0.3s ease; }
         .message-bubble.left { align-self: flex-start; background: #1a1a24; border-bottom-left-radius: 4px; }
         .message-bubble.right { align-self: flex-end; background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; border-bottom-right-radius: 4px; font-weight: 600; }
         .message-system { align-self: center; text-align: center; font-size: 10px; color: #888; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 10px; margin: 5px 0; }
-        
         @keyframes popIn { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-
         .chat-input-area { display: flex; gap: 8px; margin-top: 10px; }
         .chat-input-area input { flex: 1; padding: 14px; border-radius: 12px; border: 1px solid #333; background: #1a1a24; color: #fff; font-family: 'Unbounded', sans-serif; font-size: 12px; outline: none; }
+        .chat-input-area input:disabled { opacity: 0.5; }
         .chat-input-area button { width: 50px; border-radius: 12px; background: #ffd700; color: #000; font-size: 18px; border: none; cursor: pointer; }
+        .chat-input-area button:disabled { opacity: 0.5; }
 
-        /* ЭКРАН ВЕРДИКТА (Плавный как iOS) */
-        .verdict-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
-            display: flex; align-items: flex-end; justify-content: center;
-            z-index: 100; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        /* --- ИНФО --- */
+        .info-box { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); line-height: 1.6; font-size: 12px; color: #bbb; margin-top: 20px; }
+        .info-box h3 { color: #fff; margin-top: 0; }
+        .creator-btn { display: inline-block; margin-top: 15px; padding: 12px 20px; background: linear-gradient(135deg, #2a2a35, #1a1a24); border-radius: 12px; color: #ffd700; text-decoration: none; font-weight: 600; border: 1px solid rgba(255,215,0,0.3); }
+
+        /* --- ТОП --- */
+        .top-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .top-item { display: flex; align-items: center; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); }
+        .top-rank { font-size: 16px; font-weight: 900; color: #ffd700; width: 30px; }
+        .top-avatar { font-size: 24px; margin-right: 15px; }
+        .top-info { flex: 1; }
+        .top-name { font-size: 14px; font-weight: bold; color: #fff; }
+        .top-money { font-size: 11px; color: #00ffcc; }
+
+        /* --- МЕНЮ --- */
+        .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(20px); border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 10; padding-bottom: env(safe-area-inset-bottom); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; font-size: 9px; cursor: pointer; transition: 0.3s; width: 20%; text-transform: uppercase; }
+        .nav-item.active { color: #ffd700; }
+        .nav-icon { font-size: 22px; margin-bottom: 4px; }
+        .nav-item.active .nav-icon { transform: translateY(-3px); filter: drop-shadow(0 0 8px rgba(255,215,0,0.6)); }
+
+        /* --- ВЕРДИКТ --- */
+        .verdict-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); display: flex; align-items: flex-end; z-index: 100; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .verdict-overlay.active { transform: translateY(0); }
-        .verdict-panel {
-            background: #121218; width: 100%; border-top-left-radius: 30px; border-top-right-radius: 30px;
-            padding: 25px; box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
-        }
+        .verdict-panel { background: #121218; width: 100%; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); }
         .verdict-panel h3 { margin: 0 0 15px 0; color: #ffd700; font-size: 16px; text-align: center; }
         .verdict-panel textarea { width: 100%; height: 100px; padding: 15px; border-radius: 16px; border: 1px solid #333; background: #1a1a24; color: #fff; font-family: 'Unbounded', sans-serif; font-size: 12px; resize: none; outline: none; margin-bottom: 15px; }
         .verdict-btns { display: flex; gap: 10px; }
         .verdict-btns button { flex: 1; padding: 16px; border-radius: 16px; border: none; font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 12px; color: #fff; cursor: pointer; }
         .btn-guilty { background: linear-gradient(135deg, #ff0f7b, #f89b29); }
         .btn-not { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+
+        /* --- ОШИБКА --- */
+        .error-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 200; display: none; align-items: center; justify-content: center; flex-direction: column; padding: 20px; text-align: center; }
+        .error-overlay.active { display: flex; }
+        .error-icon { font-size: 50px; margin-bottom: 20px; }
+        .error-text { color: #ff4b2b; font-size: 16px; font-weight: bold; line-height: 1.5; margin-bottom: 20px; }
     </style>
 </head>
 <body>
     <canvas id="particles-js"></canvas>
-    
+
+    <!-- Окно ошибки -->
+    <div class="error-overlay" id="error-overlay">
+        <div class="error-icon">❌</div>
+        <div class="error-text" id="error-text">Игра отменена из-за недостаточного количества игроков (минимум 3).</div>
+        <button onclick="tg.close()" style="padding: 15px 30px; border-radius: 12px; background: #333; color: white; border: none; font-weight: bold;">Закрыть</button>
+    </div>
+
     <div class="content">
-        <!-- ЭКРАН ЛОББИ -->
-        <div class="lobby-screen" id="screen-lobby">
-            <div class="game-title">Зал Суда</div>
-            <div class="players-grid">
-                <div class="player-card"><div class="avatar">👨‍⚖️</div><div class="role">Прокурор</div><div class="name" id="name-prokuror">Иван</div></div>
-                <div class="player-card"><div class="avatar">🙋‍♂️</div><div class="role">Истец</div><div class="name" id="name-istets">Ты</div></div>
-                <div class="player-card"><div class="avatar">🤷‍♂️</div><div class="role">Ответчик</div><div class="name" id="name-otvetchik">Петр</div></div>
-                <div class="player-card"><div class="avatar">🛡️</div><div class="role">Адвокат</div><div class="name" id="name-advokat">Анна</div></div>
+        <!-- ЛОББИ -->
+        <div class="screen active" id="screen-lobby">
+            <div class="lobby-box">
+                <div class="game-title">Лобби создано</div>
+                <div class="lobby-timer" id="lobby-timer">03:00</div>
+                
+                <button onclick="toggleMusic()" id="music-btn" class="music-btn">🎵 Включить музыку</button>
+
+                <div class="player-card">
+                    <div class="avatar">🙋‍♂️</div>
+                    <div class="role">Истец</div>
+                    <div class="name">Ты</div>
+                </div>
+                
+                <div class="invite-link">https://t.me/courtrus_bot?start=join_12345</div>
+                <div class="wait-text">Ожидание игроков (минимум 3)...</div>
             </div>
         </div>
 
-        <!-- ЭКРАН ЧАТА -->
-        <div class="chat-screen" id="screen-chat">
-            <div class="chat-messages" id="chat-messages">
-                <!-- Сюда будут падать сообщения -->
-            </div>
+        <!-- ЧАТ -->
+        <div class="screen" id="screen-chat">
+            <div class="chat-header" id="chat-header">Ожидание начала...</div>
+            <div class="chat-messages" id="chat-messages"></div>
             <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Твой аргумент...">
-                <button onclick="sendMessage()">➤</button>
+                <input type="text" id="chat-input" placeholder="Напиши аргумент (минимум 5 слов)..." disabled>
+                <button id="chat-send-btn" onclick="sendMessage()" disabled>➤</button>
             </div>
+        </div>
+
+        <!-- ИНФО -->
+        <div class="screen" id="screen-info">
+            <div class="game-title" style="text-align:center; margin-top:20px;">О Игре</div>
+            <div class="info-box">
+                <h3>Добро пожаловать в Суд!</h3>
+                <p>Это иммерсивная ролевая игра, где вы можете стать участником настоящего судебного заседания. Разделитесь на роли: Прокурор, Истец, Ответчик, Адвокат и Судья.</p>
+                <p>Ваша задача — разобраться в деле, приводить аргументы и вынести справедливый (или смешной) вердикт.</p>
+                <p>Создатель игры:</p>
+                <a href="https://t.me/gupuyi" class="creator-btn">✈️ @gupuyi</a>
+            </div>
+        </div>
+
+        <!-- ТОП -->
+        <div class="screen" id="screen-top">
+            <div class="game-title" style="text-align:center; margin-top:20px;">Топ-50</div>
+            <div class="top-list" id="top-list"></div>
         </div>
     </div>
 
-    <!-- ПАНЕЛЬ ВЕРДИКТА (Скрыта по умолчанию) -->
+    <!-- ВЕРДИКТ -->
     <div class="verdict-overlay" id="verdict-overlay">
         <div class="verdict-panel">
             <h3>Вынесение вердикта</h3>
@@ -100,85 +158,169 @@
         </div>
     </div>
 
+    <!-- НИЖНЕЕ МЕНЮ -->
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="switchTab('screen-chat', this)"><div class="nav-icon">💬</div><div>Чат</div></div>
+        <div class="nav-item active" onclick="switchTab('screen-lobby', this)"><div class="nav-icon">⚖️</div><div>Игра</div></div>
+        <div class="nav-item" onclick="switchTab('screen-top', this)"><div class="nav-icon">🏆</div><div>Топ</div></div>
+        <div class="nav-item" onclick="switchTab('screen-info', this)"><div class="nav-icon">ℹ️</div><div>Инфо</div></div>
+    </div>
+
+    <!-- ПЛЕЕР -->
+    <audio id="bg-music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand(); tg.setHeaderColor('#050505'); tg.setBackgroundColor('#050505');
 
-        let myRole = "Прокурор"; // В реальности придет от бота
+        // --- 1. ТАЙМЕР ЛОББИ ---
+        let lobbyTime = 180;
+        let lobbyInterval = setInterval(() => {
+            lobbyTime--;
+            let min = Math.floor(lobbyTime / 60);
+            let sec = lobbyTime % 60;
+            document.getElementById('lobby-timer').innerText = `0${min}:${sec < 10 ? '0'+sec : sec}`;
+            if (lobbyTime <= 0) {
+                clearInterval(lobbyInterval);
+                document.getElementById('error-overlay').classList.add('active');
+            }
+        }, 1000);
 
-        // --- 1. ЛОГИКА ЧАТА ---
-        function addMessage(text, type, sender = "") {
+        // --- 2. СИМУЛЯЦИЯ НАЧАЛА ИГРЫ (Через 10 сек) ---
+        setTimeout(() => {
+            clearInterval(lobbyInterval);
+            switchTab('screen-chat', document.querySelectorAll('.nav-item')[0]);
+            startGame("Прокурор");
+        }, 10000);
+
+        // --- 3. ЛОГИКА ЧАТА ---
+        let currentRole = "";
+        let messageCount = 0;
+        const MESSAGES_NEEDED = 5;
+
+        function startGame(role) {
+            currentRole = role;
+            messageCount = 0;
+            document.getElementById('chat-header').innerText = `Ход: ${role}`;
+            addMessage(`⚖️ Суд начался. Слово предоставляется ${role}у. Напишите аргумент (минимум 5 слов).`, "system");
+            
+            document.getElementById('chat-input').disabled = false;
+            document.getElementById('chat-send-btn').disabled = false;
+            document.getElementById('chat-input').focus();
+        }
+
+        function addMessage(text, type) {
             let box = document.getElementById('chat-messages');
             let div = document.createElement('div');
-            
-            if (type === 'system') {
-                div.className = 'message-system';
-                div.innerText = text;
-            } else {
+            if (type === 'system') { div.className = 'message-system'; div.innerText = text; } 
+            else {
                 div.className = `message-bubble ${type === 'my' ? 'right' : 'left'}`;
-                if (sender) {
-                    let nameSpan = document.createElement('div');
-                    nameSpan.style.fontSize = '9px';
-                    nameSpan.style.marginBottom = '3px';
-                    nameSpan.style.opacity = '0.7';
-                    nameSpan.innerText = sender;
-                    div.appendChild(nameSpan);
-                }
                 div.appendChild(document.createTextNode(text));
             }
-            
-            box.appendChild(div);
-            box.scrollTop = box.scrollHeight;
+            box.appendChild(div); box.scrollTop = box.scrollHeight;
         }
 
         function sendMessage() {
             let input = document.getElementById('chat-input');
-            if (input.value.trim() === '') return;
+            let text = input.value.trim();
+            if (text === '') return;
+
+            let words = text.split(/\s+/).filter(word => word.length > 0);
+            if (words.length < 5) {
+                addMessage(`⚠️ Ошибка: минимум 5 слов! (У тебя: ${words.length})`, "system");
+                return;
+            }
             
-            // Добавляем наше сообщение
-            addMessage(input.value, 'my', 'Ты');
-            
-            // Отправляем боту
-            tg.sendData(JSON.stringify({ action: 'chat_message', text: input.value, role: myRole }));
+            addMessage(text, 'my');
             input.value = '';
+            messageCount++;
+
+            if (messageCount >= MESSAGES_NEEDED) {
+                document.getElementById('chat-input').disabled = true;
+                document.getElementById('chat-send-btn').disabled = true;
+                addMessage(`✅ ${currentRole} закончил. Переход хода...`, "system");
+                tg.sendData(JSON.stringify({ action: 'next_turn' }));
+                
+                setTimeout(() => {
+                    if (currentRole === "Прокурор") startGame("Истец");
+                    else if (currentRole === "Истец") startGame("Ответчик");
+                    else if (currentRole === "Ответчик") startGame("Адвокат");
+                    else if (currentRole === "Адвокат") {
+                        document.getElementById('chat-header').innerText = "Ожидание вердикта Судьи";
+                        showVerdictPanel();
+                    }
+                }, 2000);
+            }
         }
 
-        // --- 2. ПЕРЕХОД В ЧАТ (Имитация начала игры) ---
-        setTimeout(() => {
-            document.getElementById('screen-lobby').style.display = 'none';
-            document.getElementById('screen-chat').classList.add('active');
-            
-            addMessage("⚖️ Суд начался. Дело: Кража печенья", "system");
-            addMessage("🔊 Слово предоставляется Прокурору. Озвучьте дело.", "system");
-        }, 1500);
-
-        // --- 3. ВЕРДИКТ СУДЬИ ---
-        function showVerdictPanel() {
-            document.getElementById('verdict-overlay').classList.add('active');
-        }
-
+        // --- 4. ВЕРДИКТ ---
+        function showVerdictPanel() { document.getElementById('verdict-overlay').classList.add('active'); }
         function sendVerdict(type) {
             let text = document.getElementById('verdict-text').value;
             if (text.trim() === '') return alert('Напиши текст решения!');
             
-            // Отправляем боту
             tg.sendData(JSON.stringify({ action: 'verdict', type: type, text: text }));
-            
-            // Закрываем панель
             document.getElementById('verdict-overlay').classList.remove('active');
-            
-            // Пишем в чат результат
-            addMessage(`Решение суда: ${text}`, "my", "Судья");
+            addMessage(`Решение суда: ${text}`, "my");
             addMessage(type === 'guilty' ? "✅ ВИНОВЕН" : "❌ НЕ ВИНОВЕН", "system");
         }
 
-        // --- 4. АНИМИРОВАННЫЙ ФОН ---
+        // --- 5. МУЗЫКА ---
+        let isMusicPlaying = false;
+        let music = document.getElementById('bg-music');
+        function toggleMusic() {
+            let btn = document.getElementById('music-btn');
+            if (isMusicPlaying) {
+                music.pause(); btn.innerText = "🎵 Включить музыку";
+            } else {
+                music.play(); btn.innerText = "🔇 Выключить музыку";
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // --- 6. МЕНЮ ---
+        function switchTab(screenId, element) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if(element) element.classList.add('active');
+            
+            if (screenId === 'screen-chat') {
+                music.pause(); isMusicPlaying = false;
+                document.getElementById('music-btn').innerText = "🎵 Включить музыку";
+            }
+        }
+
+        // --- 7. ТОП-50 ---
+        const billionaires = [
+            { name: "Илон Маск", money: "$250 млрд", icon: "🚀" },
+            { name: "Джефф Безос", money: "$180 млрд", icon: "📦" },
+            { name: "Бернар Арно", money: "$170 млрд", icon: "👜" },
+            { name: "Марк Цукерберг", money: "$150 млрд", icon: "👤" },
+            { name: "Билл Гейтс", money: "$130 млрд", icon: "💻" },
+            { name: "Ларри Эллисон", money: "$120 млрд", icon: "☁️" },
+            { name: "Уоррен Баффет", money: "$110 млрд", icon: "📈" },
+            { name: "Ларри Пейдж", money: "$105 млрд", icon: "🔍" },
+            { name: "Сергей Брин", money: "$100 млрд", icon: "🌐" },
+            { name: "Стив Балмер", money: "$95 млрд", icon: "🪟" }
+        ];
+        function renderTop() {
+            let list = document.getElementById('top-list'); list.innerHTML = '';
+            billionaires.forEach((b, i) => {
+                let div = document.createElement('div');
+                div.className = 'top-item';
+                div.innerHTML = `<div class="top-rank">${i+1}</div><div class="top-avatar">${b.icon}</div><div class="top-info"><div class="top-name">${b.name}</div><div class="top-money">${b.money}</div></div>`;
+                list.appendChild(div);
+            });
+        }
+        renderTop();
+
+        // --- 8. ФОН ---
         const canvas = document.getElementById('particles-js'); const ctx = canvas.getContext('2d'); let particles = [];
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize); resize();
         class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 0.5; this.speedX = Math.random() * 0.5 - 0.25; this.speedY = Math.random() * 0.5 - 0.25; this.opacity = Math.random() * 0.5 + 0.1; } update() { this.x += this.speedX; this.y += this.speedY; if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width; if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height; } draw() { ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } }
         for (let i = 0; i < 100; i++) particles.push(new Particle());
-        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); } animate();
-    </script>
-</body>
-</html>
+        function anim
