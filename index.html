@@ -6,121 +6,194 @@
     <title>Зал Суда</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
-            background: linear-gradient(135deg, #1e1e24, #0f0f13);
+            background-color: #050508; /* Глубокий черный */
             color: white;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             margin: 0;
-            padding: 15px;
-            text-align: center;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
-        .header {
-            background: rgba(255, 215, 0, 0.1);
-            border: 1px solid #ffd700;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+
+        /* Анимированный фон */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
-        h1 { font-size: 20px; margin: 0; color: #ffd700; }
-        .case-text { font-size: 14px; color: #ccc; margin-top: 10px; }
-        .players {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
+
+        /* Основной контент */
+        .content {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+            padding-bottom: 80px; /* Место для меню */
         }
+
+        .screen { display: none; animation: fadeIn 0.3s ease; }
+        .screen.active { display: flex; flex-direction: column; height: 100%; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Экран Игры */
+        .game-header { text-align: center; margin-bottom: 20px; }
+        .game-title { color: #ffd700; font-size: 22px; margin: 0; text-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
+        .case-text { color: #aaa; font-size: 14px; margin-top: 5px; }
+        
+        .timer { font-size: 40px; font-weight: 800; text-align: center; color: #00ffcc; text-shadow: 0 0 20px rgba(0, 255, 204, 0.6); margin: 10px 0 20px 0; font-variant-numeric: tabular-nums; }
+
+        .players-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
         .player-card {
-            background: #2a2a35;
-            border-radius: 12px;
-            padding: 10px;
-            border: 1px solid #444;
-            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px; padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease; text-align: center;
         }
         .player-card.active {
-            border-color: #00ffcc;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
-            transform: scale(1.05);
+            border-color: #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+            background: rgba(0, 255, 204, 0.1); transform: translateY(-3px);
         }
-        .role { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        .name { font-size: 16px; font-weight: bold; margin-top: 5px; }
-        .timer {
-            font-size: 36px;
-            font-weight: bold;
-            color: #00ffcc;
-            margin: 15px 0;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-        }
-        .actions { display: flex; flex-direction: column; gap: 10px; }
+        .role { font-size: 10px; color: #888; text-transform: uppercase; margin-bottom: 5px; }
+        .name { font-size: 14px; font-weight: 800; }
+
+        .actions { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
         button {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
-            transition: 0.2s;
+            width: 100%; padding: 16px; border: none; border-radius: 16px;
+            font-size: 16px; font-weight: 800; font-family: 'Montserrat', sans-serif;
+            color: white; cursor: pointer; transition: transform 0.1s;
         }
-        button:active { transform: scale(0.95); }
-        .btn-guilty { background: linear-gradient(90deg, #ff416c, #ff4b2b); }
-        .btn-not { background: linear-gradient(90deg, #2193b0, #6dd5ed); }
+        button:active { transform: scale(0.96); }
+        .btn-guilty { background: linear-gradient(135deg, #ff416c, #ff4b2b); box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4); }
+        .btn-not { background: linear-gradient(135deg, #2193b0, #6dd5ed); box-shadow: 0 4px 15px rgba(33, 147, 176, 0.4); }
+        .btn-primary { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4); }
+
+        /* Экран Лобби */
+        .lobby-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; text-align: center; margin-top: 20px; }
+        .link-box { background: #1a1a24; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px dashed #ffd700; word-break: break-all; color: #ffd700; font-size: 14px; }
+
+        /* Нижнее меню */
+        .bottom-nav {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: rgba(10, 10, 15, 0.9); backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 10;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: #666; font-size: 10px; cursor: pointer; transition: 0.3s; width: 20%;
+        }
+        .nav-item.active { color: #ffd700; transform: translateY(-5px); }
+        .nav-icon { font-size: 24px; margin-bottom: 4px; }
+        
+        .center-btn {
+            width: 60px; height: 60px; background: linear-gradient(135deg, #ffd700, #ff8c00);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 28px; color: #000; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            transform: translateY(-20px); border: 4px solid #050508;
+        }
+
+        /* Информация */
+        .info-text { font-size: 14px; line-height: 1.6; color: #ccc; }
+        .creator { color: #ffd700; font-weight: bold; text-decoration: none; }
+
+        /* Чат */
+        .chat-box { flex: 1; background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; display: flex; flex-direction: column; }
+        .chat-messages { flex: 1; overflow-y: auto; margin-bottom: 10px; font-size: 14px; }
+        .chat-input { display: flex; gap: 10px; }
+        .chat-input input { flex: 1; padding: 12px; border-radius: 10px; border: none; background: #1a1a24; color: white; outline: none; }
+        .chat-input button { width: auto; padding: 0 15px; border-radius: 10px; background: #00ffcc; color: #000; }
+
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>⚖️ ЗАЛ СУДА</h1>
-        <div class="case-text" id="case-text">Загрузка дела...</div>
+
+    <canvas id="particles-js"></canvas>
+
+    <div class="content">
+        <!-- ЭКРАН ИГРЫ -->
+        <div class="screen active" id="screen-game">
+            <div class="game-header">
+                <h1 class="game-title">⚖️ Зал Суда</h1>
+                <div class="case-text" id="case-text">Обвиняется в краже печенья</div>
+            </div>
+            <div class="timer" id="timer">03:00</div>
+            <div class="players-grid">
+                <div class="player-card" id="card-prokuror"><div class="role">Прокурор</div><div class="name" id="name-prokuror">Иван</div></div>
+                <div class="player-card" id="card-istets"><div class="role">Истец</div><div class="name" id="name-istets">Ты</div></div>
+                <div class="player-card" id="card-otvetchik"><div class="role">Ответчик</div><div class="name" id="name-otvetchik">Петр</div></div>
+                <div class="player-card" id="card-advokat"><div class="role">Адвокат</div><div class="name" id="name-advokat">Анна</div></div>
+            </div>
+            <div class="actions">
+                <button class="btn-guilty" onclick="sendAction('verdict_guilty')">✅ Виновен</button>
+                <button class="btn-not" onclick="sendAction('verdict_not_guilty')">❌ Не виновен</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ЛОББИ -->
+        <div class="screen" id="screen-lobby">
+            <div class="game-header">
+                <h1 class="game-title">🎮 Лобби создано</h1>
+                <div class="case-text">Ожидание игроков (минимум 3)</div>
+            </div>
+            <div class="lobby-box">
+                <p>Ссылка для друзей:</p>
+                <div class="link-box" id="lobby-link">Генерация ссылки...</div>
+                <p style="font-size:12px; color:#888;">Нажми кнопку ниже, чтобы начать игру (когда наберется 3 человека)</p>
+                <button class="btn-primary" onclick="sendAction('start_game')" style="margin-top:10px;">🚀 Начать игру</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ИНФОРМАЦИИ -->
+        <div class="screen" id="screen-info">
+            <div class="game-header"><h1 class="game-title">ℹ️ О игре</h1></div>
+            <div class="info-text">
+                <p><strong>Добро пожаловать в Суд!</strong></p>
+                <p>Это игра для компании, где вы можете почувствовать себя участником настоящего судебного заседания. Вам предстоит разделиться на роли: Прокурор, Истец, Ответчик, Адвокат и Судья.</p>
+                <p>Ваша задача — разобраться в деле, приводить аргументы и вынести справедливый (или смешной) вердикт.</p>
+                <br>
+                <p>Создатель игры: <a href="https://t.me/gupuyi" class="creator">@gupuyi</a></p>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ЧАТА -->
+        <div class="screen" id="screen-chat">
+            <div class="game-header"><h1 class="game-title">💬 Чат лобби</h1></div>
+            <div class="chat-box">
+                <div class="chat-messages" id="chat-messages">
+                    <div style="color:#888; text-align:center; margin-top:20px;">Здесь вы можете обсудить игру...</div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chat-input-field" placeholder="Сообщение...">
+                    <button onclick="sendChat()">➤</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="timer" id="timer">03:00</div>
-
-    <div class="players">
-        <div class="player-card" id="card-prokuror">
-            <div class="role">Прокурор</div>
-            <div class="name" id="name-prokuror">...</div>
+    <!-- НИЖНЕЕ МЕНЮ -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('game', this)">
+            <div class="nav-icon">⚖️</div>
+            <div>Игра</div>
         </div>
-        <div class="player-card" id="card-istets">
-            <div class="role">Истец</div>
-            <div class="name" id="name-istets">...</div>
+        <div class="nav-item" onclick="switchTab('chat', this)">
+            <div class="nav-icon">💬</div>
+            <div>Чат</div>
         </div>
-        <div class="player-card" id="card-otvetchik">
-            <div class="role">Ответчик</div>
-            <div class="name" id="name-otvetchik">...</div>
+        <div class="center-btn" onclick="switchTab('lobby', this, true)">
+            🎮
         </div>
-        <div class="player-card" id="card-advokat">
-            <div class="role">Адвокат</div>
-            <div class="name" id="name-advokat">...</div>
-        </div>
-    </div>
-
-    <div class="actions">
-        <button class="btn-guilty" onclick="sendAction('verdict_guilty')">✅ ВИНОВЕН</button>
-        <button class="btn-not" onclick="sendAction('verdict_not_guilty')">❌ НЕ ВИНОВЕН</button>
-    </div>
-
-    <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand(); // Развернуть на весь экран
-        tg.setHeaderColor('#1e1e24');
-        tg.setBackgroundColor('#1e1e24');
-
-        // Тестовые данные для проверки дизайна
-        document.getElementById('case-text').innerText = "Обвиняется в краже печенья";
-        document.getElementById('name-prokuror').innerText = "Иван";
-        document.getElementById('name-istets').innerText = "Ты";
-        document.getElementById('name-otvetchik').innerText = "Петр";
-        document.getElementById('name-advokat').innerText = "Анна";
-        
-        // Подсвечиваем активного игрока
-        document.getElementById('card-prokuror').classList.add('active');
-
-        // Функция отправки данных боту
-        function sendAction(action) {
-            tg.sendData(JSON.stringify({ action: action }));
-            tg.close(); // Закрыть окно после нажатия
-        }
-    </script>
-</body>
-</html>
+        <div class="nav-item" onclick="switchTab('info', this)">
