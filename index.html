@@ -57,34 +57,61 @@
   }
 
   /* Аватарка */
-  .avatar {
-    width: 148px;
-    height: 148px;
-    margin: 0 auto 22px;
-    border-radius: 50%;
-    padding: 4px;
-    background: conic-gradient(#0ff, #7a5cff, #ff5cf0, #0ff);
-    box-shadow: 0 0 30px rgba(0, 255, 255, .55), 0 0 60px rgba(255, 92, 240, .25);
-    animation: spin-glow 8s linear infinite;
-  }
-  @keyframes spin-glow { to { transform: rotate(0deg); } }
-  .avatar .frame {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    overflow: hidden;
-    background: linear-gradient(135deg, #16213e, #0f3460);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.6rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-    color: #0ff;
-    text-shadow: 0 0 12px #0ff;
-  }
-  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* --- Аватарка (заменяет строки 60-69) --- */
+.avatar {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  padding: 4px; /* Толщина цветной рамки */
+  background: conic-gradient(#0ff, #7a5cff, #ff5cf0, #0ff);
+}
 
+/* --- Вращающееся свечение позади (добавьте это) --- */
+.avatar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(#0ff, #7a5cff, #ff5cf0, #0ff);
+  z-index: -1;
+  animation: spin-glow 8s linear infinite;
+  filter: blur(15px);
+  opacity: 0.9;
+}
+
+/* --- Обертка для картинки (заменяет строки 71-85) --- */
+.avatar .frame {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden; /* ВОТ ЭТО делает картинку круглой */
+  background: linear-gradient(135deg, #16213e, #0f3460);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #0ff;
+  text-shadow: 0 0 12px #0ff;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Сама картинка (заменяет строку 86) --- */
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- Ключевые кадры (заменяет строку 70) --- */
+@keyframes spin-glow { 
+  to { transform: rotate(360deg); } 
+}
   /* Никнейм и описание */
   .nickname {
     font-size: clamp(2rem, 7vw, 2.8rem);
