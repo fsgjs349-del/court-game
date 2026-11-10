@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>жиробас шпулька</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 50% 0%, #10102a, #000 60%);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #fff;
+    overflow-x: hidden;
+    padding: 20px;
+  }
+
+  ::selection { background: #0ff3; }
+
+  /* ── Летящие светящиеся икринки ───────────────── */
+  .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .particle {
+    position: absolute;
+    bottom: -20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 6px 2px rgba(255,255,255,.9),
+                0 0 20px 8px rgba(170,220,255,.45);
+    animation: rise linear infinite;
+    opacity: 0;
+  }
+  @keyframes rise {
+    0%   { transform: translate(0, 0);            opacity: 0; }
+    10%  {                                        opacity: .95; }
+    50%  { transform: translate(28px, -50vh);     opacity: .8; }
+    90%  {                                        opacity: .6; }
+    100% { transform: translate(-24px, -108vh);   opacity: 0; }
+  }
+
+  /* ── Карточка ─────────────────────────────────── */
+  .card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    padding: 48px 32px 36px;
+    text-align: center;
+    background: rgba(8, 10, 20, .55);
+    border: 1px solid rgba(0, 255, 255, .18);
+    border-radius: 24px;
+    box-shadow: 0 0 60px rgba(0, 255, 255, .08), inset 0 0 40px rgba(0,0,0,.5);
+    backdrop-filter: blur(10px);
+  }
+
+  /* Аватарка */
+  .avatar {
+    width: 148px;
+    height: 148px;
+    margin: 0 auto 22px;
+    border-radius: 50%;
+    padding: 4px;
+    background: conic-gradient(#0ff, #7a5cff, #ff5cf0, #0ff);
+    box-shadow: 0 0 30px rgba(0, 255, 255, .55), 0 0 60px rgba(255, 92, 240, .25);
+    animation: spin-glow 8s linear infinite;
+  }
+  @keyframes spin-glow { to { transform: rotate(0deg); } }
+  .avatar .frame {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #16213e, #0f3460);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.6rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #0ff;
+    text-shadow: 0 0 12px #0ff;
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* Никнейм и описание */
+  .nickname {
+    font-size: clamp(2rem, 7vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px #0ff, 0 0 28px #0af, 0 0 55px #a0f;
+    margin-bottom: 14px;
+  }
+  .bio {
+    font-size: .98rem;
+    line-height: 1.65;
+    color: #b8c4dd;
+    margin-bottom: 34px;
+  }
+
+  /* ── Аудиоплеер в стиле SoundCloud ────────────── */
+  .player {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 14px;
+    text-align: left;
+  }
+  .play-btn {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background: linear-gradient(135deg, #ff7a18, #ff3d00);
+    box-shadow: 0 0 18px rgba(255, 90, 0, .6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .play-btn:hover { transform: scale(1.07); box-shadow: 0 0 28px rgba(255, 90, 0, .9); }
+  .play-btn svg { width: 22px; height: 22px; fill: #fff; }
+  .play-btn .icon-pause { display: none; }
+  .play-btn.playing .icon-play  { display: none; }
+  .play-btn.playing .icon-pause { display: block; }
+  .player-right { flex: 1; min-width: 0; }
+  .track-title {
+    font-weight: 700;
+    font-size: .95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 0 8px rgba(0, 255, 255, .5);
+  }
+  .track-author {
+    font-size: .8rem;
+    color: #8a97b5;
+    margin: 2px 0 10px;
+  }
+  .progress {
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, .14);
+    cursor: pointer;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #ff7a18, #ff3d00);
+    box-shadow: 0 0 10px rgba(255, 90, 0, .8);
+    transition: width .1s linear;
+  }
+  .time {
+    display: flex;
+    justify-content: space-between;
+    font-size: .72rem;
+    font-family: monospace;
+    color: #8a97b5;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<main class="card">
+  <div class="avatar">
+    <div class="frame" id="avatarFallback">ЖЛ</div>
+    <img src="avatar.jpg" alt="Аватарка"
+         onerror="this.remove()">
+  </div>
+
+  <h1 class="nickname">жиробас шпулька</h1>
+
+  <p class="bio">
+    бывший участник антикоч движения,извините меня пожалуйста 
+  </p>
+
+  <div class="player">
+    <button class="play-btn" id="playBtn" aria-label="Play">
+      <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+    </button>
+    <div class="player-right">
+      <div class="track-title">Lil peep - Nuts</div>
+      <div class="track-author">жиробас шпулька</div>
+      <div class="progress" id="progress">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="time">
+        <span id="timeCur">0:00</span>
+        <span id="timeDur">0:00</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<audio id="audio" src="track.mp3" preload="metadata"></audio>
+
+<script>
+  /* Икринки: создаём частицы с рандомными размером и скоростью */
+  const box = document.getElementById('particles');
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = 2 + Math.random() * 4;          // 2–6 px
+    p.style.width = p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = 8 + Math.random() * 14 + 's';
+    p.style.animationDelay = -Math.random() * 20 + 's';
+    box.appendChild(p);
+  }
+
+  /* Плеер: play/pause, прогресс, перемотка кликом */
+  const audio = document.getElementById('audio');
+  const playBtn = document.getElementById('playBtn'); в
+  const fill = document.getElementById('progressFill');
+  const bar = document.getElementById('progress');
+  const tCur = document.getElementById('timeCur');
+  const tDur = document.getElementById('timeDur');
+
+  const fmt = s => !isFinite(s) ? '0:00'
+    : Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+
+  playBtn.addEventListener('click', () =>
+    audio.paused ? audio.play() : audio.pause());
+
+  audio.addEventListener('play',  () => { playBtn.classList.add('playing'); playBtn.setAttribute('aria-label', 'Pause'); });
+  audio.addEventListener('pause', () => { playBtn.classList.remove('playing'); playBtn.setAttribute('aria-label', 'Play'); });
+
+  audio.addEventListener('loadedmetadata', () => tDur.textContent = fmt(audio.duration));
+  audio.addEventListener('timeupdate', () => {
+    fill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+    tCur.textContent = fmt(audio.currentTime);
+  });
+
+  bar.addEventListener('click', e => {
+    const r = bar.getBoundingClientRect();
+    audio.currentTime = (e.clientX - r.left) / r.width * audio.duration;
+  });
+</script>
+</body>
+</html>
